@@ -5,7 +5,8 @@ int main(){
     //startRecovery();
     displayMainMenu();
     displayTransactionalOperations();
-    displayDeveloperOptions();
+    displaySystemOperations();
+    displayCrashSimulationOptions();
     displayOtherOptions();
     return 0;
 }
