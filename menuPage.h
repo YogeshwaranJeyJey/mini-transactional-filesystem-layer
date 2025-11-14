@@ -6,7 +6,9 @@
 int doPadding(char* string);
 void displayProjectTitle();
 void displayMainMenu();
-void displayDeveloperOptions();
+void displayTransactionalOperations();
+void displaySystemOperations();
+void displayCrashSimulationOptions();
 void displayOtherOptions();
 
 #endif
