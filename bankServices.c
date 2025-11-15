@@ -1,11 +1,40 @@
 #include "common.h"
 #include "bankServices.h"
+#include "logHandler.h"
 
 accountDetails_t accDetails;
 
 int checkValidPassword(char* passwd, char* reTypedPasswd){
     if(strcmp(passwd, reTypedPasswd) == 0) return 1;
     return 0;
+}
+
+long generateNewAccNumber(){
+    long lastAccNumber = 100;
+    FILE* fp = fopen("accountNumberCounter.txt", "r");
+    if(!fp){
+        fp = fopen("accountNumberCounter.txt", "w");
+        if(!fp){
+            printf("Error creating accountNumberCounter.txt file!\n");
+            return -1;
+        }
+        lastAccNumber = 101;
+        fprintf(fp, "%ld", lastAccNumber);
+        fclose(fp);
+        return lastAccNumber;
+    }
+    fscanf(fp, "%ld", &lastAccNumber);
+    fclose(fp);
+    long newAccNumber = lastAccNumber + 1;
+
+    fp = fopen("accountNumberCounter.txt", "w");
+    if(!fp){
+        printf("Error occurred while writing the newAccNumber!\n");
+        return -1;
+    }
+    fprintf(fp, "%ld", newAccNumber);
+    fclose(fp);
+    return newAccNumber;
 }
 
 void addAccount(){
@@ -47,4 +76,15 @@ void addAccount(){
             printf("Error: Passwords do not match!\n\n");
         }
     }
+    
+    accDetails.accountNumber = generateNewAccNumber();
+    accDetails.accountBalance = 0;
+
+    long txnId = generateTxnId();
+    if(txnId == -1){
+        return;
+    }
+    writeToWal(&accDetails, txnId, "CREATE");
+    //writeToJournal();
+    writeToOriginalFile(&accDetails);
 }
