@@ -1,8 +1,6 @@
-#include "menuPage.h" 
-
-int doPadding(char* string){
-    return (WIDTH - strlen(string)) / 2;
-}
+#include "common.h"
+#include "menuPage.h"
+#include "bankServices.h"
 
 void displayProjectTitle(){
     int padding = doPadding(PROJECTTITLE);
@@ -17,7 +15,7 @@ void displayMainMenu(){
     printf("%*s%s%*s\n",padding, "",WELCOMEMSG, padding, "");
     padding = doPadding(MAINMENU);
     printf("%*s%s%*s\n",padding, "",MAINMENU, padding, "");
-    printf("1. Add Account\n");
+    printf("1. Create New Account\n");
     printf("2. View Account Details\n");
     printf("3. Update Account Details\n");
     printf("4. Delete Account\n");
@@ -56,4 +54,84 @@ void displayOtherOptions(){
     printf("17. About Project\n");
     printf("18. EXIT\n");
     printf("--------------------------------------------------\n");
+}
+
+void userChoiceHandler(int userChoice, int *displayAgain){
+    switch(userChoice){
+            case 1:
+            addAccount();
+            break;
+
+            /*case 2:
+            printf("2\n");
+            break;
+
+            case 3:
+            printf("3\n");
+            break;
+
+            case 4:
+            printf("4\n");
+            break;
+
+            case 5:
+            printf("5\n");
+            break;
+
+            case 6:
+            printf("6\n");
+            break;
+
+            case 7:
+            printf("7\n");
+            break;
+
+            case 8:
+            printf("8\n");
+            break;
+
+            case 9:
+            printf("9\n");
+            break;
+
+            case 10:
+            printf("10\n");
+            break;
+
+            case 11:
+            printf("11\n");
+            break;
+
+            case 12:
+            printf("12\n");
+            break;
+
+            case 13:
+            printf("13\n");
+            break;
+
+            case 14:
+            printf("14\n");
+            break;
+
+            case 15:
+            printf("15\n");
+            break;
+
+            case 16:
+            printf("16\n");
+            break;
+            
+            case 17:
+            printf("17\n");
+            break;*/
+
+            case 18:
+            printf("Exiting...\n");
+            break;
+
+            default:
+            printf("Enter a valid option!\n");
+            *displayAgain = 0;
+        }
 }
