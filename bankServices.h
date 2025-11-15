@@ -8,7 +8,7 @@
 #define ADDACCOUNTHEADER    "Create New Account"
 
 typedef struct accountDetails{
-    int accountNumber;
+    long accountNumber;
     char name[MAXNAMECHAR];
     float accountBalance;
     char mobileNumber[MAXMOBILECHAR];
@@ -17,6 +17,7 @@ typedef struct accountDetails{
 }accountDetails_t;
 
 int checkValidPassword(char* passwd, char* reTypedPasswd);
+long generateNewAccNumber();
 void addAccount();
 
 #endif
