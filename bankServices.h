@@ -19,5 +19,11 @@ typedef struct accountDetails{
 int checkValidPassword(char* passwd, char* reTypedPasswd);
 long generateNewAccNumber();
 void addAccount();
+void viewAccount();
+void updateAccountDetails();
+void deleteAccount();
+void depositCash();
+void withDrawCash();
+void transferCash();
 
 #endif
