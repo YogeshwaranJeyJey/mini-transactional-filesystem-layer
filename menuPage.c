@@ -62,31 +62,31 @@ void userChoiceHandler(int userChoice, int *displayAgain){
             addAccount();
             break;
 
-            /*case 2:
-            printf("2\n");
+            case 2:
+            viewAccount();
             break;
 
             case 3:
-            printf("3\n");
+            updateAccountDetails();
             break;
 
             case 4:
-            printf("4\n");
+            deleteAccount();
             break;
 
             case 5:
-            printf("5\n");
+            depositCash();
             break;
 
             case 6:
-            printf("6\n");
+            withDrawCash();
             break;
 
             case 7:
-            printf("7\n");
+            transferCash();
             break;
 
-            case 8:
+            /*case 8:
             printf("8\n");
             break;
 
