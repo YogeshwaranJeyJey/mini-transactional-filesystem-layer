@@ -84,7 +84,58 @@ void addAccount(){
     if(txnId == -1){
         return;
     }
-    writeToWal(&accDetails, txnId, "CREATE");
-    //writeToJournal();
-    writeToOriginalFile(&accDetails);
+    writeCreateToWal(&accDetails, txnId);
+    writeAddToOriginalFile(&accDetails);
+    writeCommitToWAL(txnId);
+}
+
+void viewAccount(){
+    if(validateAccountDetails(&accDetails)){
+        printAccountDetails(&accDetails);
+    }
+    else
+        return;
+}
+
+void updateAccountDetails(){
+    if(validateAccountDetails(&accDetails)){
+        updateDetails(&accDetails);
+    }
+    else
+        return;
+}
+
+void deleteAccount(){
+    if(validateAccountDetails(&accDetails)){
+        long txnId = generateTxnId();
+        writeDeleteToWal(&accDetails, txnId);
+        writeDeleteToOriginalFile(&accDetails);
+        writeCommitToWAL(txnId);
+    }
+    else
+        return;
+}
+
+void depositCash(){
+    if(validateAccountDetails(&accDetails)){
+        deposit(&accDetails);
+    }
+    else
+        return;
+}
+
+void withDrawCash(){
+    if(validateAccountDetails(&accDetails)){
+        withDraw(&accDetails);
+    }
+    else
+        return;
+}
+
+void transferCash(){
+    if(validateAccountDetails(&accDetails)){
+        transfer(&accDetails);
+    }
+    else
+        return;
 }
