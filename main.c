@@ -1,5 +1,6 @@
 #include "common.h"
 #include "menuPage.h"
+#include "crashRecovery.h"
 
 int main(){
     char userChoiceBuffer[MAXCHOICECHAR];
@@ -8,7 +9,7 @@ int main(){
         if(displayAgain){
             displayProjectTitle();
         }
-        //startRecovery();
+        startRecovery();
         displayMainMenu();
         displayTransactionalOperations();
         displaySystemOperations();
@@ -17,7 +18,7 @@ int main(){
         
         printf("Enter your choice: ");
         fgets(userChoiceBuffer, sizeof(userChoiceBuffer), stdin);
-        userChoice = strtol(userChoiceBuffer, NULL, MAXCHOICECHAR);
+        userChoice = strtol(userChoiceBuffer, NULL, 10);
         
         userChoiceHandler(userChoice, &displayAgain);
     }
