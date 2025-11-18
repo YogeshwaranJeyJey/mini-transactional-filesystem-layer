@@ -36,104 +36,90 @@ void displaySystemOperations(){
     printf("\n%*s%s%*s\n",padding, "",SYSTEMOPTIONSMENU, padding, "");
     printf("8. Show All Accounts\n");
     printf("9. Show Wal Logs\n");
-    printf("10. Show Journal Logs\n");
-    printf("11. Clear Wal Logs\n");
-    printf("12. Clear Journal Logs\n");
+    printf("10. Clear Wal Logs\n");
 }
 
 void displayCrashSimulationOptions(){
     int padding = doPadding(SIMULATECRASHMENU);
     printf("\n%*s%s%*s\n",padding, "",SIMULATECRASHMENU, padding, "");
-    printf("13. Simulate Crash After Wal And Journal Write\n");
-    printf("14. Simulate Crash After Partial Wal And Journal Write\n");
-    printf("15. Simulate Crash Before Commit\n");
-    printf("16. Simulate Crash After Commit\n");
+    printf("11. Simulate Crash After Wal Write\n");
+    printf("12. Simulate Crash After Partial Wal Write\n");
+    printf("13. Simulate Crash Before Commit\n");
+    printf("14. Simulate Crash After Commit\n");
 }
 
 void displayOtherOptions(){
     int padding = doPadding(OTHEROPTIONS);
     printf("\n%*s%s%*s\n",padding, "",OTHEROPTIONS, padding, "");
-    printf("17. About Project\n");
-    printf("18. EXIT\n");
+    printf("15. About Project\n");
+    printf("16. EXIT\n");
     printf("--------------------------------------------------\n");
 }
 
 void userChoiceHandler(int userChoice, int *displayAgain){
+    *displayAgain = 0;
     switch(userChoice){
-            case 1:
+        case 1:
             addAccount();
             break;
 
-            case 2:
+        case 2:
             viewAccount();
             break;
 
-            case 3:
+        case 3:
             updateAccountDetails();
             break;
 
-            case 4:
+        case 4:
             deleteAccount();
             break;
 
-            case 5:
+        case 5:
             depositCash();
             break;
 
-            case 6:
+        case 6:
             withDrawCash();
             break;
 
-            case 7:
+        case 7:
             transferCash();
             break;
 
-            case 8:
+        case 8:
             showAllAccounts();
             break;
 
-            case 9:
+        case 9:
             showWalLogs();
             break;
 
-            /*case 10:
-            printf("10\n");
-            break;*/
-
-            case 11:
+        case 10:
             clearWalLogs();
             break;
 
-            /*case 12:
-            printf("12\n");
-            break;*/
-
-            case 13:
+        case 11:
             simulateCrashAfterWalWrite();
             break;
 
-            case 14:
+        case 12:
             simulateCrashAfterPartialWalWrite();
             break;
 
-            case 15:
+        case 13:
             simulatCrashBeforeCommit();
             break;
 
-            case 16:
+        case 14:
             simulatCrashAfterCommit();
             break;
 
-            /*case 17:
-            printf("17\n");
-            break;*/
-
-            case 18:
-            printf("Exiting...\n");
+        case 15:
+            aboutProject();
             break;
 
-            default:
+        default:
             printf("Enter a valid option!\n");
-            *displayAgain = 0;
-        }
+    }
 }
