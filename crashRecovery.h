@@ -22,14 +22,12 @@ typedef struct {
     accountDetails_t newToAccDetails;
 }wal_Txn_t;
 
-void startRecovery();
+long getLastTxnId();
 int readWalTransaction(FILE* walFp, wal_Txn_t* walTxn);
-long getLastTxnId(char* checkSumPath);
-int isBlank(const char *s);
 int accountExists(long accNo);
 int undo(wal_Txn_t *walTxn);
 int redo(wal_Txn_t* walTxn);
-int updateCheckSum(char* checkSumPath, long lastTxnId);
-void printStruct(wal_Txn_t* walTxn);
+int updateCheckPoint(long lastTxnId);
+void startRecovery();
 
 #endif
