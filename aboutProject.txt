@@ -1,0 +1,32 @@
+MINI TRANSACTIONAL FILESYSTEM LAYER
+
+    This project aims to build a mini transactional file system layer supporting atomic writes using WAL or Journaling and recovery logic.
+This layer sits on top of a normal text file and ensures that,
+1. No partial writes occur
+2. Crashes do not corrupt file.
+3. All operations are atomic.
+4. Recovery of the file when the crash occurs to maintain consistency
+
+Core Concept:
+Before modifying the data file, the intended changes have to be written on a WAL or a Journal file. Only if the WAL or Journal file is safely written the changes are updated to the data file.
+If a crash occurs, the system uses this WAL or Journal file to Redo the committed changes or undo the incomplete changes.
+
+Data file:
+The data file contains the account details of a bank’s customers.
+Account No
+Name
+Account Balance
+Mobile No
+Email Id
+
+Components:
+1.Transaction Manager
+    Handles all the transaction related operations like write, update, commit, abort etc…
+2.WAL or Journaling
+    Stores the Transaction ID, which account is being modified, old values, New Values and the commit status.
+3.Atomic Write Logic
+    Ensures the real data file is updated only after the journal entry is safely written.
+4.Crash Recovery Module
+    Handles the crash recovery process.
+5.File Read/Write Layer
+Provides APIs for reading account data and updating account records.
