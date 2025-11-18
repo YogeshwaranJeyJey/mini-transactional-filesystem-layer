@@ -3,8 +3,6 @@
 
 #include "bankServices.h"
 
-#define MAXBUFFERSIZE   256
-
 long generateTxnId();
 void writeCreateToWal(accountDetails_t* accDetails, long txnId);
 void writeUpdateToWal(accountDetails_t* oldAccountDetails, accountDetails_t* newAccountDetails, long txnId);
