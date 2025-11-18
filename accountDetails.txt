@@ -1,0 +1,3 @@
+AccountNo|Name|Balance|MobileNumber|MailId|Password
+175|yogeshwaran|25000.00|6382701430|yogesh@yahoo.com|123@
+176|Mathu|25000.00|6969875450|mathu@gmail.com|qwer@1
