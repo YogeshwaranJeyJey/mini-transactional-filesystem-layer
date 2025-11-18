@@ -1,6 +1,7 @@
 #include "common.h"
 #include "logHandler.h"
 #include "bankServices.h"
+#include "crashSimulationHandler.h"
 
 
 long generateTxnId(){
@@ -45,6 +46,13 @@ void writeCreateToWal(accountDetails_t* accDetails, long txnId){
     fprintf(fp, "Name: %s\n", accDetails->name);
     fprintf(fp, "Account Balance: %f\n", accDetails->accountBalance);
     fprintf(fp, "MobileNumber: %s\n", accDetails->mobileNumber);
+
+    if (crashMode == CRASH_AFTER_PARTIAL_WAL) {
+        printf("Simulating crash after partial Wal write...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
+
     fprintf(fp, "MailId: %s\n", accDetails->mailId);
     fprintf(fp, "Password: %s\n\n", accDetails->password);
 
@@ -52,6 +60,13 @@ void writeCreateToWal(accountDetails_t* accDetails, long txnId){
     fprintf(fp, "End Txn\n\n");
 
     fflush(fp);
+
+    if(crashMode == CRASH_AFTER_WAL){
+        printf("Simulating crash after Wal write...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
+
     fclose(fp);
 }
 
@@ -69,6 +84,13 @@ void writeUpdateToWal(accountDetails_t* oldAccountDetails, accountDetails_t* new
     fprintf(fp, "Old Name: %s\n", oldAccountDetails->name);
     fprintf(fp, "Old Account Balance: %f\n", oldAccountDetails->accountBalance);
     fprintf(fp, "Old MobileNumber: %s\n", oldAccountDetails->mobileNumber);
+
+    if (crashMode == CRASH_AFTER_PARTIAL_WAL) {
+        printf("Simulating crash after partial Wal write...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
+
     fprintf(fp, "Old MailId: %s\n", oldAccountDetails->mailId);
     fprintf(fp, "Old Password: %s\n\n", oldAccountDetails->password);
 
@@ -83,6 +105,13 @@ void writeUpdateToWal(accountDetails_t* oldAccountDetails, accountDetails_t* new
     fprintf(fp, "End Txn\n\n");
 
     fflush(fp);
+    
+    if(crashMode == CRASH_AFTER_WAL){
+        printf("Simulating crash after Wal write...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
+
     fclose(fp);
 }
 
@@ -100,6 +129,13 @@ void writeDeleteToWal(accountDetails_t* oldAccountDetails, long txnId){
     fprintf(fp, "Old Name: %s\n", oldAccountDetails->name);
     fprintf(fp, "Old Account Balance: %f\n", oldAccountDetails->accountBalance);
     fprintf(fp, "Old MobileNumber: %s\n", oldAccountDetails->mobileNumber);
+
+    if (crashMode == CRASH_AFTER_PARTIAL_WAL) {
+        printf("Simulating crash after partial Wal write...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
+
     fprintf(fp, "Old MailId: %s\n", oldAccountDetails->mailId);
     fprintf(fp, "Old Password: %s\n\n", oldAccountDetails->password);
 
@@ -107,6 +143,13 @@ void writeDeleteToWal(accountDetails_t* oldAccountDetails, long txnId){
     fprintf(fp, "End Txn\n\n");
 
     fflush(fp);
+
+    if(crashMode == CRASH_AFTER_WAL){
+        printf("Simulating crash after Wal write...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
+
     fclose(fp);
 }
 
@@ -124,25 +167,51 @@ void writeTransferToWal(accountDetails_t* oldFromAccountDetails,
         fprintf(fp, "Old Account Number: %ld\n", oldFromAccountDetails->accountNumber);
         fprintf(fp, "Old Name: %s\n", oldFromAccountDetails->name);
         fprintf(fp, "Old Account Balance: %f\n\n", oldFromAccountDetails->accountBalance);
+        fprintf(fp, "Old MobileNumber: %s\n", oldFromAccountDetails->mobileNumber);
+        fprintf(fp, "Old MailId: %s\n", oldFromAccountDetails->mailId);
+        fprintf(fp, "Old Password: %s\n\n", oldFromAccountDetails->password);
 
         fprintf(fp, "New Account Number: %ld\n", fromAccDetails->accountNumber);
         fprintf(fp, "New Name: %s\n", fromAccDetails->name);
+
+        if (crashMode == CRASH_AFTER_PARTIAL_WAL) {
+            printf("Simulating crash after partial Wal write...\n");
+            crashMode = NO_CRASH;
+            exit(1);
+        }
+
         fprintf(fp, "New Account Balance: %f\n\n", fromAccDetails->accountBalance);
+        fprintf(fp, "New MobileNumber: %s\n", fromAccDetails->mobileNumber);
+        fprintf(fp, "New MailId: %s\n", fromAccDetails->mailId);
+        fprintf(fp, "New Password: %s\n\n", fromAccDetails->password);
 
         fprintf(fp, "Old Account Number: %ld\n", oldToAccountDetails->accountNumber);
         fprintf(fp, "Old Name: %s\n", oldToAccountDetails->name);
         fprintf(fp, "Old Account Balance: %f\n\n", oldToAccountDetails->accountBalance);
+        fprintf(fp, "Old MobileNumber: %s\n", oldToAccountDetails->mobileNumber);
+        fprintf(fp, "Old MailId: %s\n", oldToAccountDetails->mailId);
+        fprintf(fp, "Old Password: %s\n\n", oldToAccountDetails->password);
 
         fprintf(fp, "New Account Number: %ld\n", toAccountDetails->accountNumber);
         fprintf(fp, "New Name: %s\n", toAccountDetails->name);
         fprintf(fp, "New Account Balance: %f\n\n", toAccountDetails->accountBalance);
+        fprintf(fp, "New MobileNumber: %s\n", toAccountDetails->mobileNumber);
+        fprintf(fp, "New MailId: %s\n", toAccountDetails->mailId);
+        fprintf(fp, "New Password: %s\n\n", toAccountDetails->password);
 
         fprintf(fp, "Commit status: Pending\n");
         fprintf(fp, "End Txn\n\n");
 
         fflush(fp);
+
+        if(crashMode == CRASH_AFTER_WAL){
+            printf("Simulating crash after Wal write...\n");
+            crashMode = NO_CRASH;
+            exit(1);
+        }
+
         fclose(fp);
-    }
+}
 
 void writeAddToOriginalFile(accountDetails_t* accDetails){
     int fileExists = 1;
@@ -159,6 +228,11 @@ void writeAddToOriginalFile(accountDetails_t* accDetails){
     if(!fileExists){
         fprintf(fp, "AccountNo|Name|Balance|MobileNumber|MailId|Password\n");
     }
+
+    trimNewLine(accDetails->name);
+    trimNewLine(accDetails->mobileNumber);
+    trimNewLine(accDetails->mailId);
+    trimNewLine(accDetails->password);
 
     fprintf(fp, "%ld|%s|%f|%s|%s|%s\n", accDetails->accountNumber, accDetails->name,
                  accDetails->accountBalance, accDetails->mobileNumber, accDetails->mailId,
@@ -188,12 +262,18 @@ void writeUpdateToOriginalFile(accountDetails_t* newAccountDetails){
         char* token = strtok(copyLine, "|");
         long fileAccNo = atol(token);
         
+        trimNewLine(newAccountDetails->name);
+        trimNewLine(newAccountDetails->mobileNumber);
+        trimNewLine(newAccountDetails->mailId);
+        trimNewLine(newAccountDetails->password);
+
         if(fileAccNo == newAccountDetails->accountNumber){
+            printf("%ld|%s|%f|%s|%s|%s\n", newAccountDetails->accountNumber, newAccountDetails->name,
+                 newAccountDetails->accountBalance, newAccountDetails->mobileNumber, newAccountDetails->mailId,
+                                                        newAccountDetails->password);
             fprintf(tempFp, "%ld|%s|%f|%s|%s|%s\n", newAccountDetails->accountNumber, newAccountDetails->name,
                  newAccountDetails->accountBalance, newAccountDetails->mobileNumber, newAccountDetails->mailId,
                                                         newAccountDetails->password);
-
-    
         }
         else{
             fprintf(tempFp, "%s", line);
@@ -210,11 +290,13 @@ void writeDeleteToOriginalFile(accountDetails_t* accDetails){
     FILE* orgFp = fopen("accountDetails.txt", "r");
     if(!orgFp){
         printf("Error opening the accountDetails.txt file");
+        return;
     }
 
     FILE* tempFp = fopen("temp.txt", "w");
     if(!tempFp){
         printf("Error while creating the temp.txt file");
+        return;
     }
 
     char line[MAXBUFFERSIZE];
@@ -261,6 +343,17 @@ void writeTransferToOriginalFile(accountDetails_t* fromAccDetails, accountDetail
         strcpy(copyLine, line);
         char* token = strtok(copyLine, "|");
         long fileAccNo = atol(token);
+
+        trimNewLine(fromAccDetails->name);
+        trimNewLine(fromAccDetails->mobileNumber);
+        trimNewLine(fromAccDetails->mailId);
+        trimNewLine(fromAccDetails->password);
+
+        trimNewLine(toAccDetails->name);
+        trimNewLine(toAccDetails->mobileNumber);
+        trimNewLine(toAccDetails->mailId);
+        trimNewLine(toAccDetails->password);
+
         
         if(fileAccNo == fromAccDetails->accountNumber){
             fprintf(tempFp, "%ld|%s|%f|%s|%s|%s\n", fromAccDetails->accountNumber, fromAccDetails->name,
@@ -284,6 +377,12 @@ void writeTransferToOriginalFile(accountDetails_t* fromAccDetails, accountDetail
 }
 
 void writeCommitToWAL(long txnId){
+    if(crashMode == CRASH_BEFORE_COMMIT){
+        printf("Simulating crash before commit...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
+    
     FILE* fp = fopen("wal.txt", "a");
     if (!fp) return;
 
@@ -291,6 +390,12 @@ void writeCommitToWAL(long txnId){
 
     fflush(fp);
     fclose(fp);
+
+    if(crashMode == CRASH_AFTER_COMMIT){
+        printf("Simulating crash after commit...\n");
+        crashMode = NO_CRASH;
+        exit(1);
+    }
 }
 
 int validateAccountDetails(accountDetails_t* accDetails){
@@ -436,7 +541,7 @@ void withDraw(accountDetails_t* oldAccDetails){
     fgets(cashBuffer, sizeof(cashBuffer), stdin);
     withDrawAmount = strtof(cashBuffer, NULL);
 
-    if(withDrawAmount >= oldAccDetails->accountBalance){
+    if(withDrawAmount > oldAccDetails->accountBalance){
         printf("Insufficient balance!\n");
         return;
     }
