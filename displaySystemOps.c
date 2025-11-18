@@ -8,15 +8,17 @@ int validateAdmin(){
     fgets(enteredPassKey, sizeof(enteredPassKey), stdin);
     enteredPassKey[strcspn(enteredPassKey, "\n")] = '\0';
     
-    if(strcmp(enteredPassKey, ADMINPASSKEY) == 0) return 1;
-    else return 0;
+    if(strcmp(enteredPassKey, ADMINPASSKEY) == 0)
+        return 1;
+    else
+        return 0;
 }
 
 void showAllAccounts(){
     if(validateAdmin()){
         printf("Access granted!\n");
-        printf("\n-----ABC Bank Customers Account Details-----\n\n");
-        FILE* fp = fopen("accountDetails.txt", "r");
+        printf("\n-----IBIBI Bank Customers Account Details-----\n\n");
+        FILE* fp = fopen(ACCOUNT_DETAILS_TXTFILE_PATH, "r");
         if(!fp){
             printf("Error opening accountDetails.txt file!\n");
             return;
@@ -36,7 +38,7 @@ void showWalLogs(){
     if(validateAdmin()){
         printf("Access granted!\n");
         printf("\n-----WAL Log Details-----\n\n");
-        FILE* fp = fopen("wal.txt", "r");
+        FILE* fp = fopen(WAL_TXTFILE_PATH, "r");
         if(!fp){
             printf("Error opening wal.txt file!\n");
             return;
@@ -56,7 +58,7 @@ void clearWalLogs(){
     if(validateAdmin()){
         printf("Access granted!\n");
         
-        FILE* fp = fopen("wal.txt", "w");
+        FILE* fp = fopen(WAL_TXTFILE_PATH, "w");
         if(!fp){
             printf("Error opening temp.txt file!\n");
             return;
