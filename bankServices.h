@@ -6,6 +6,13 @@
 #define MAXMAILCHAR 30
 #define MAXPASSWDCHAR   9
 #define ADDACCOUNTHEADER    "Create New Account"
+#define VIEWACCOUNTHEADER    "View Account Details"
+#define UPDATEACCOUNTHEADER    "Update Account Details"
+#define DELETEACCOUNTHEADER    "Delete Account Details"
+#define DEPOSITHEADER   "Deposit Cash"
+#define WITHDRAWHEADER   "Withdraw Cash"
+#define TRANSFERHEADER   "Transfer Cash"
+#define ACCOUNTNUMBERCOUNTERTXTPATH "accountNumberCounter.txt"
 
 typedef struct accountDetails{
     long accountNumber;
@@ -16,8 +23,6 @@ typedef struct accountDetails{
     char password[MAXPASSWDCHAR];
 }accountDetails_t;
 
-int checkValidPassword(char* passwd, char* reTypedPasswd);
-long generateNewAccNumber();
 void addAccount();
 void viewAccount();
 void updateAccountDetails();
