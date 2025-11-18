@@ -2,7 +2,7 @@
 #define MENUPAGE_H
 
 #define PROJECTTITLE    "MINI TRANSACTIONAL FILESYSTEM LAYER"
-#define WELCOMEMSG  "Welcome to ABC Bank!"
+#define WELCOMEMSG  "Welcome to IBIBI Bank!"
 #define MAINMENU    "Main Menu"
 #define TRANSACTIONSMENU    "Transactional Operations"
 #define SYSTEMOPTIONSMENU   "System Operations (Admin only)"
