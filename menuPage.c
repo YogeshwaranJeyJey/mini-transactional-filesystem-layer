@@ -1,6 +1,8 @@
 #include "common.h"
 #include "menuPage.h"
 #include "bankServices.h"
+#include "displaySystemOps.h"
+#include "crashSimulationHandler.h"
 
 void displayProjectTitle(){
     int padding = doPadding(PROJECTTITLE);
@@ -86,43 +88,43 @@ void userChoiceHandler(int userChoice, int *displayAgain){
             transferCash();
             break;
 
-            /*case 8:
-            printf("8\n");
+            case 8:
+            showAllAccounts();
             break;
 
             case 9:
-            printf("9\n");
+            showWalLogs();
             break;
 
-            case 10:
+            /*case 10:
             printf("10\n");
-            break;
+            break;*/
 
             case 11:
-            printf("11\n");
+            clearWalLogs();
             break;
 
-            case 12:
+            /*case 12:
             printf("12\n");
-            break;
+            break;*/
 
             case 13:
-            printf("13\n");
+            simulateCrashAfterWalWrite();
             break;
 
             case 14:
-            printf("14\n");
+            simulateCrashAfterPartialWalWrite();
             break;
 
             case 15:
-            printf("15\n");
+            simulatCrashBeforeCommit();
             break;
 
             case 16:
-            printf("16\n");
+            simulatCrashAfterCommit();
             break;
-            
-            case 17:
+
+            /*case 17:
             printf("17\n");
             break;*/
 
