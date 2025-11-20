@@ -80,11 +80,17 @@ int validateMail(char *mail){
     return 0;
 }
 
+int validatePassword(char* password){
+    int len = strlen(password);
+    if(len > 6 || len == 0)
+        return 0;
+    return 1;
+}
+
 int getNewAccountDetails(accountDetails_t* accDetails){
     char passwd[MAXPASSWDCHAR];
     char reTypedPasswd[MAXPASSWDCHAR];
     
-    int passwdRepeatFlag = 1;
     int padding = doPadding(ADDACCOUNTHEADER);
     
     printf("--------------------------------------------------\n");
@@ -123,11 +129,21 @@ int getNewAccountDetails(accountDetails_t* accDetails){
         accDetails->mailId[strcspn(accDetails->mailId, "\n")] = '\0';
     }
 
-    while(passwdRepeatFlag){
+    while(1){
         printf("Set Password For Your Account\n");
         printf("Enter New Password (Max 6 characters): ");
         fgets(passwd, sizeof(passwd), stdin);
+        if(passwd[strlen(passwd) - 1] != '\n'){
+            int c;
+            while((c = getchar()) != '\n' && c != EOF);
+        }
         passwd[strcspn(passwd, "\n")] = '\0';
+        while(!validatePassword(passwd)){
+            printf("Invalid Password! Password should not exceed 6 characters!\n");
+            printf("Re-enter Password: ");
+            fgets(passwd, sizeof(passwd), stdin);
+            passwd[strcspn(passwd, "\n")] = '\0';
+        }
 
         printf("Confirm Password: ");
         fgets(reTypedPasswd, sizeof(reTypedPasswd), stdin);
@@ -140,7 +156,7 @@ int getNewAccountDetails(accountDetails_t* accDetails){
         }
         else{
             printf("Error: Passwords do not match!\n\n");
-            return 0;
+            printf("Retry setting the password!\n");
         }
     }
     return 1;
@@ -197,6 +213,7 @@ void writeCreateToWal(accountDetails_t* accDetails, long txnId, int recoveryFlag
     if (crashMode == CRASH_AFTER_PARTIAL_WAL) {
         fprintf(fp, "\n");
         printf("Simulating crash after partial Wal write...\n");
+        printf("System crashed!\n");
         crashMode = NO_CRASH;
         exit(1);
     }
@@ -212,8 +229,12 @@ void writeCreateToWal(accountDetails_t* accDetails, long txnId, int recoveryFlag
 
     fflush(fp);
 
+    int fd = fileno(fp);
+    fsync(fd);
+
     if(crashMode == CRASH_AFTER_WAL){
         printf("Simulating crash after Wal write...\n");
+        printf("System crashed!\n");
         crashMode = NO_CRASH;
         exit(1);
     }
@@ -244,6 +265,7 @@ void writeUpdateToWal(accountDetails_t* oldAccountDetails, accountDetails_t* new
     if (crashMode == CRASH_AFTER_PARTIAL_WAL) {
         fprintf(fp, "\n");
         printf("Simulating crash after partial Wal write...\n");
+        printf("System crashed!\n");
         crashMode = NO_CRASH;
         exit(1);
     }
@@ -265,9 +287,13 @@ void writeUpdateToWal(accountDetails_t* oldAccountDetails, accountDetails_t* new
         fprintf(fp, "COMMIT %ld\n\n", txnId);
 
     fflush(fp);
+
+    int fd = fileno(fp);
+    fsync(fd);
     
     if(crashMode == CRASH_AFTER_WAL){
         printf("Simulating crash after Wal write...\n");
+        printf("System crashed!\n");
         crashMode = NO_CRASH;
         exit(1);
     }
@@ -293,6 +319,7 @@ void writeDeleteToWal(accountDetails_t* oldAccountDetails, long txnId){
     if (crashMode == CRASH_AFTER_PARTIAL_WAL) {
         fprintf(fp, "\n");
         printf("Simulating crash after partial Wal write...\n");
+        printf("System crashed!\n");
         crashMode = NO_CRASH;
         exit(1);
     }
@@ -305,8 +332,12 @@ void writeDeleteToWal(accountDetails_t* oldAccountDetails, long txnId){
 
     fflush(fp);
 
+    int fd = fileno(fp);
+    fsync(fd);
+
     if(crashMode == CRASH_AFTER_WAL){
         printf("Simulating crash after Wal write...\n");
+        printf("System crashed!\n");
         crashMode = NO_CRASH;
         exit(1);
     }
@@ -347,7 +378,7 @@ void writeTransferToWal(accountDetails_t* oldFromAccountDetails,
             exit(1);
         }
 
-        fprintf(fp, "New Account Balance: %f\n\n", fromAccDetails->accountBalance);
+        fprintf(fp, "New Account Balance: %.2f\n\n", fromAccDetails->accountBalance);
         fprintf(fp, "New MobileNumber: %s\n", fromAccDetails->mobileNumber);
         fprintf(fp, "New MailId: %s\n", fromAccDetails->mailId);
         fprintf(fp, "New Password: %s\n\n", fromAccDetails->password);
@@ -373,6 +404,9 @@ void writeTransferToWal(accountDetails_t* oldFromAccountDetails,
             fprintf(fp, "COMMIT %ld\n\n", txnId);
 
         fflush(fp);
+
+        int fd = fileno(fp);
+        fsync(fd);
 
         if(crashMode == CRASH_AFTER_WAL){
             printf("Simulating crash after Wal write...\n");
@@ -614,7 +648,7 @@ void printAccountDetails(accountDetails_t* accDetails){
     printf("Name: %s\n", accDetails->name);
     printf("MobileNo: %s\n", accDetails->mobileNumber);
     printf("MailId: %s\n", accDetails->mailId);
-    printf("Account Balance: %f\n", accDetails->accountBalance);
+    printf("Account Balance: %.2f\n", accDetails->accountBalance);
 }
 
 int updateDetails(accountDetails_t* oldAccDetails){
