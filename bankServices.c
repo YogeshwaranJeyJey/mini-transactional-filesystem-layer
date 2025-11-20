@@ -19,6 +19,7 @@ void addAccount(){
         writeAddToOriginalFile(&accDetails);
         
         printf("Account created successfully!\n");
+        printf("Your account number: %ld\n", accDetails.accountNumber);
     }
     else{
         printf("Account creation failed!\n");
